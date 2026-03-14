@@ -28,7 +28,7 @@ jobs:
           pyinstaller --onefile --windowed --add-binary "image_processor/build_ci/image_processor:." gui.py
       
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ImageProcessor-mac
           path: dist/
@@ -59,7 +59,7 @@ jobs:
           pyinstaller --onefile --windowed --add-binary "image_processor\build_ci\image_processor.exe;." gui.py
       
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ImageProcessor-windows
           path: dist/
