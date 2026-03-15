@@ -23,17 +23,17 @@ jobs:
       - name: Build app
         run: |
           pyinstaller --onefile --windowed \
-            --add-binary "build_ci/image_processor:." \
-            --hidden-import tkinter \
-            --hidden-import tkinter.filedialog \
-            --collect-all customtkinter \
-            gui.py
+          --add-binary "build_ci/image_processor:." \
+          --hidden-import tkinter \
+          --hidden-import tkinter.filedialog \
+          --collect-all customtkinter \
+          gui.py
 
-            - name: Upload artifact
-              uses: actions/upload-artifact@v4
-              with:
-                name: ImageProcessor-mac
-                path: dist/
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ImageProcessor-mac
+          path: dist/
 
   build-windows:
     runs-on: windows-latest
