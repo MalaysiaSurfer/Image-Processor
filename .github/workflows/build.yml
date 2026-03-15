@@ -1,10 +1,35 @@
-name: Build Windows
+name: Build
 
 on:
   push:
     branches: [ main ]
 
 jobs:
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build C++
+        run: |
+          mkdir -p build_ci
+          cd build_ci
+          cmake ..
+          make image_processor
+
+      - name: Install Python deps
+        run: pip3 install --break-system-packages pyinstaller customtkinter pillow
+
+      - name: Build app
+        run: |
+          pyinstaller --onefile --windowed --add-binary "build_ci/image_processor:." gui.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ImageProcessor-mac
+          path: dist/
+
   build-windows:
     runs-on: windows-latest
     steps:
