@@ -86,6 +86,5 @@ python3 gui.py
 │   └── arg_parser.*           # парсер аргументов
 ├── gui.py                     # графический интерфейс
 ├── CMakeLists.txt
-├── test_script/               # тестовые данные
 └── .github/workflows/         # GitHub Actions
 ```
