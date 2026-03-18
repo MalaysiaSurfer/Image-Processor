@@ -2,11 +2,13 @@
 
 #include <cmath>
 
+const double HALF = 2.0;
+
 Image TwirlFilter::Apply(const Image& src) const {
     Image dst(src.GetWidth(), src.GetHeight());
 
-    double cx = src.GetWidth() / 2.0;
-    double cy = src.GetHeight() / 2.0;
+    double cx = static_cast<double>(src.GetWidth()) / HALF;
+    double cy = static_cast<double>(src.GetHeight()) / HALF;
     for (size_t y = 0; y < src.GetHeight(); ++y) {
         for (size_t x = 0; x < src.GetWidth(); ++x) {
             double dx = static_cast<double>(x) - cx;

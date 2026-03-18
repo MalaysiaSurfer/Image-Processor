@@ -7,7 +7,7 @@
 
 #pragma pack(push, 1)
 struct BMPFileHeader {
-    uint16_t signature;
+    uint16_t SIGNATURE;
     uint32_t file_size;
     uint16_t reserved1;
     uint16_t reserved2;
@@ -19,7 +19,7 @@ struct BMPInfoHeader {
     int32_t width;
     int32_t height;
     uint16_t planes;
-    uint16_t bits_per_pixel;
+    uint16_t BITS_PER_PIXEL;
     uint32_t compression;
     uint32_t image_size;
     int32_t x_pixels_per_meter;
@@ -28,6 +28,11 @@ struct BMPInfoHeader {
     uint32_t colors_important;
 };
 #pragma pack(pop)
+
+const int SIGNATURE = 0x4D42;
+const int BITS_PER_PIXEL = 24;
+const double RGB = 255.0;
+const double FAST_ROUND = 0.5;
 
 Image LoadBMP(const std::string& path) {
     std::ifstream file(path, std::ios::binary);
@@ -40,7 +45,7 @@ Image LoadBMP(const std::string& path) {
     if (!file) {
         throw std::runtime_error("Failed to read file header");
     }
-    if (file_header.signature != 0x4D42) {
+    if (file_header.SIGNATURE != SIGNATURE) {
         throw std::runtime_error("Not a BMP file: " + path);
     }
 
@@ -49,7 +54,7 @@ Image LoadBMP(const std::string& path) {
     if (!file) {
         throw std::runtime_error("Failed to read info header");
     }
-    if (info_header.bits_per_pixel != 24) {
+    if (info_header.BITS_PER_PIXEL != BITS_PER_PIXEL) {
         throw std::runtime_error("Only 24-bit BMP supported");
     }
     if (info_header.compression != 0) {
@@ -76,7 +81,7 @@ Image LoadBMP(const std::string& path) {
             uint8_t blue = row_buf[x * 3 + 0];
             uint8_t green = row_buf[x * 3 + 1];
             uint8_t red = row_buf[x * 3 + 2];
-            image.At(static_cast<size_t>(x), static_cast<size_t>(y)) = Color(red / 255.0, green / 255.0, blue / 255.0);
+            image.At(static_cast<size_t>(x), static_cast<size_t>(y)) = Color(red / RGB, green / RGB, blue / RGB);
         }
     }
 
@@ -95,7 +100,7 @@ void SaveBMP(const Image& image, const std::string& path) {
     uint32_t data_size = static_cast<uint32_t>(row_size * static_cast<size_t>(height));
 
     BMPFileHeader file_header{};
-    file_header.signature = 0x4D42;
+    file_header.SIGNATURE = SIGNATURE;
     file_header.file_size = sizeof(BMPFileHeader) + sizeof(BMPInfoHeader) + data_size;
     file_header.reserved1 = 0;
     file_header.reserved2 = 0;
@@ -106,7 +111,7 @@ void SaveBMP(const Image& image, const std::string& path) {
     info_header.width = width;
     info_header.height = height;
     info_header.planes = 1;
-    info_header.bits_per_pixel = 24;
+    info_header.BITS_PER_PIXEL = BITS_PER_PIXEL;
     info_header.compression = 0;
     info_header.image_size = 0;
     info_header.x_pixels_per_meter = 0;
@@ -123,9 +128,9 @@ void SaveBMP(const Image& image, const std::string& path) {
         int32_t y = height - 1 - row;
         for (int32_t x = 0; x < width; ++x) {
             Color c = image.At(static_cast<size_t>(x), static_cast<size_t>(y));
-            row_buf[x * 3 + 0] = static_cast<uint8_t>(c.b * 255.0 + 0.5);
-            row_buf[x * 3 + 1] = static_cast<uint8_t>(c.g * 255.0 + 0.5);
-            row_buf[x * 3 + 2] = static_cast<uint8_t>(c.r * 255.0 + 0.5);
+            row_buf[x * 3 + 0] = static_cast<uint8_t>(c.b * RGB + FAST_ROUND);
+            row_buf[x * 3 + 1] = static_cast<uint8_t>(c.g * RGB + FAST_ROUND);
+            row_buf[x * 3 + 2] = static_cast<uint8_t>(c.r * RGB + FAST_ROUND);
         }
         file.write(reinterpret_cast<const char*>(row_buf.data()), static_cast<std::streamsize>(row_size));
     }

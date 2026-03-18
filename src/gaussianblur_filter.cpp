@@ -3,15 +3,18 @@
 #include <cmath>
 #include <vector>
 
+const double GAUSS = 3.0;
+const double GAUSS_MULT = 2.0;
+
 Image GaussianBlurFilter::Apply(const Image& src) const {
-    int radius = static_cast<int>(std::ceil(3.0 * sigma_));
+    int radius = static_cast<int>(std::ceil(GAUSS * sigma_));
     size_t kernel_size = static_cast<size_t>(2 * radius + 1);
     std::vector<double> kernel(kernel_size);
 
     double sum = 0.0;
     for (size_t i = 0; i < kernel_size; ++i) {
         int d = static_cast<int>(i) - radius;
-        kernel[i] = std::exp(-(d * d) / (2.0 * sigma_ * sigma_));
+        kernel[i] = std::exp(-(d * d) / (GAUSS_MULT * sigma_ * sigma_));
         sum += kernel[i];
     }
     for (auto& v : kernel) {
@@ -21,7 +24,9 @@ Image GaussianBlurFilter::Apply(const Image& src) const {
     Image tmp(src.GetWidth(), src.GetHeight());
     for (size_t y = 0; y < src.GetHeight(); ++y) {
         for (size_t x = 0; x < src.GetWidth(); ++x) {
-            double r = 0.0, g = 0.0, b = 0.0;
+            double r = 0.0;
+            double g = 0.0;
+            double b = 0.0;
             for (size_t k = 0; k < kernel_size; ++k) {
                 int sx = static_cast<int>(x) + static_cast<int>(k) - radius;
                 const Color& c = src.SafeAt(sx, static_cast<int>(y));
@@ -36,7 +41,9 @@ Image GaussianBlurFilter::Apply(const Image& src) const {
     Image dst(tmp.GetWidth(), tmp.GetHeight());
     for (size_t x = 0; x < tmp.GetWidth(); ++x) {
         for (size_t y = 0; y < tmp.GetHeight(); ++y) {
-            double r = 0.0, g = 0.0, b = 0.0;
+            double r = 0.0;
+            double g = 0.0;
+            double b = 0.0;
             for (size_t k = 0; k < kernel_size; ++k) {
                 int sy = static_cast<int>(y) + static_cast<int>(k) - radius;
                 const Color& c = tmp.SafeAt(static_cast<int>(x), sy);
