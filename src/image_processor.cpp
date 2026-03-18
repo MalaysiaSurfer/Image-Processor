@@ -7,6 +7,7 @@
 #include "edgedetection_filter.h"
 #include "crop_filter.h"
 #include "gaussianblur_filter.h"
+
 #include <iostream>
 
 int main(int argc, char** argv) {

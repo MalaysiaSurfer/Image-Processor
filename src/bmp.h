@@ -1,6 +1,7 @@
 #pragma once
 
 #include "image.h"
+
 #include <string>
 
 Image LoadBMP(const std::string& path);

@@ -1,4 +1,5 @@
 #include "bmp.h"
+
 #include <stdexcept>
 #include <fstream>
 #include <cstdint>

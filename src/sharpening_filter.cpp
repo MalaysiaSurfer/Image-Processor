@@ -1,4 +1,5 @@
 #include "sharpening_filter.h"
+
 #include <vector>
 
 Image SharpeningFilter::Apply(const Image& src) const {

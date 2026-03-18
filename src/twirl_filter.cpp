@@ -1,4 +1,5 @@
 #include "twirl_filter.h"
+
 #include <cmath>
 
 Image TwirlFilter::Apply(const Image& src) const {

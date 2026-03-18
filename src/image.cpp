@@ -1,4 +1,5 @@
 #include "image.h"
+
 #include <algorithm>
 
 Image::Image(size_t width, size_t height) : width_(width), height_(height), pixels_(width * height) {

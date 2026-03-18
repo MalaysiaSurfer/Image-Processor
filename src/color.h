@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+
 struct Color {
     double r = 0.0;
     double g = 0.0;
